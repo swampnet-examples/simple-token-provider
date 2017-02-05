@@ -81,7 +81,7 @@ namespace SimpleTokenProvider
 				SigningCredentials = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256),
 			}));
 
-			//app.UseStaticFiles();
+			app.UseStaticFiles();
 			app.UseMvc();
         }
     }
