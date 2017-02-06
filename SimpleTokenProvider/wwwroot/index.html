@@ -40,7 +40,7 @@
 				$.ajax({
 					url: "api/values",
 					type: 'GET',
-					headers: { "Authorization": localStorage.getItem('token') },
+					headers: { "Authorization": "bearer " + localStorage.getItem('token') },
 					error: function () {
 						console.log("Error");
 					},
