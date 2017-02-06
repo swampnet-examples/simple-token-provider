@@ -4,6 +4,7 @@
 		<meta charset="utf-8" />
 		<title></title>
 		<meta name="google-signin-client_id" content="180621841414-7usmtr5dkceuhv6mbtn6upkulmgde3k8.apps.googleusercontent.com">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 		<script src="https://apis.google.com/js/platform.js" async defer></script>
 		<script>
 			function onSignIn(googleUser) {
@@ -16,6 +17,7 @@
 				// pass this to backend.
 				var id_token = googleUser.getAuthResponse().id_token;
 				console.log(id_token);
+				localStorage.setItem('token', id_token)
 			}
 
 			function signOut() {
@@ -25,10 +27,36 @@
 				});
 			}
 		</script>
+		<script>
+			$(document).ready(function () {
+				console.log("Ready!!");
+				$("#values").click(function () {
+					console.log("click)");
+					getValues();
+				});
+			});
+
+			function getValues() {
+				$.ajax({
+					url: "api/values",
+					type: 'GET',
+					headers: { "Authorization": localStorage.getItem('token') },
+					error: function () {
+						console.log("Error");
+					},
+					success: function (data) {
+						console.log(data);
+						$("#values").replaceWith(data);
+					}
+				});
+			}
+		</script>
 	</head>
 	<body>
 		<h1>test</h1>
 		<div class="g-signin2" data-onsuccess="onSignIn"></div>
 		<a href="#" onclick="signOut();">Sign out</a>
+		<hr/>
+		<div id="values">Boosh</div>
 	</body>
 </html>
