@@ -67,34 +67,36 @@ namespace SimpleTokenProvider
 			//	ClockSkew = TimeSpan.Zero
 			//};
 
+			var secretKey = "xxxxxxxx";
+			var signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(secretKey));
+
+			var tokenValidationParameters = new TokenValidationParameters
+			{
+				// The signing key must match!
+				ValidateIssuerSigningKey = true,
+				IssuerSigningKey = signingKey,
+
+				//// Validate the JWT Issuer (iss) claim
+				//ValidateIssuer = true,
+				//ValidIssuer = "ExampleIssuer",
+
+				//// Validate the JWT Audience (aud) claim
+				//ValidateAudience = true,
+				//ValidAudience = "ExampleAudience",
+
+				// Validate the token expiry
+				ValidateLifetime = true,
+
+				// If you want to allow a certain amount of clock drift, set that here:
+				//ClockSkew = TimeSpan.Zero
+			};
+
 			app.UseJwtBearerAuthentication(new JwtBearerOptions
 			{
 				AutomaticAuthenticate = true,
 				AutomaticChallenge = true,
-				TokenValidationParameters = new TokenValidationParameters
-				{
-					//ValidateIssuer = true,
-					//ValidIssuer = "https://issuer.example.com",
-
-					//ValidateAudience = true,
-					//ValidAudience = "https://yourapplication.example.com",
-
-					ValidateLifetime = true,
-				}
+				TokenValidationParameters = tokenValidationParameters
 			});
-			//app.UseJwtBearerAuthentication(new JwtBearerOptions
-			//{
-			//	AutomaticAuthenticate = true,
-			//	AutomaticChallenge = true/*,
-			//	TokenValidationParameters = tokenValidationParameters*/
-			//});
-
-			//app.UseMiddleware<TokenProviderMiddleware>(Options.Create(new TokenProviderOptions
-			//{
-			//	Audience = "ExampleAudience",
-			//	Issuer = "ExampleIssuer",
-			//	SigningCredentials = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256),
-			//}));
 
 			app.UseStaticFiles();
 			app.UseMvc();
